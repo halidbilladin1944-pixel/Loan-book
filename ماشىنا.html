@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="ug" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">📱 تېلېگرامما ئۇچۇر يوللاش نۇسخىسى V34.0</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-color: #e2e8f0;
+            --accent: #10b981;
+            --danger: #e11d48;
+            --warning: #d97706;
+            --success: #059669;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-color); 
+            background-image: 
+                radial-gradient(at 20% 20%, rgba(16, 185, 129, 0.08) 0px, transparent 40%),
+                radial-gradient(at 80% 80%, rgba(30, 41, 59, 0.3) 0px, transparent 40%);
+            background-attachment: fixed;
+            color: var(--text-color); 
+            padding-bottom: 90px; 
+            padding-top: 12px; 
+            min-height: 100vh;
+            overflow-x: hidden; 
+            transition: background 0.4s, color 0.4s;
+        }
+
+        .dollar-bg { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+        .floating-dollar {
+            position: absolute; bottom: -80px;
+            color: rgba(16, 185, 129, 0.18); font-size: 28px; font-weight: 700;
+            text-shadow: 0 0 8px rgba(16, 185, 129, 0.2);
+            animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0.05; }
+            50% { opacity: 0.4; transform: translateY(-50vh) rotate(180deg) scale(1); }
+            100% { transform: translateY(-115vh) rotate(360deg) scale(0.9); opacity: 0; }
+        }
+
+        .container { max-width: 520px; margin: 0 auto; padding: 12px; position: relative; z-index: 10; }
+
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 18px; 
+            padding: 18px; 
+            border: 1px solid var(--card-border); 
+            margin-bottom: 16px; 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .stat-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .stat-card { 
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; 
+            padding: 12px 6px; text-align: center; backdrop-filter: blur(12px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        .stat-title { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        .stat-value { font-size: 13px; font-weight: 800; }
+
+        .marquee-box {
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px;
+            padding: 10px 14px; margin-bottom: 14px; overflow: hidden; white-space: nowrap; position: relative;
+            backdrop-filter: blur(12px); box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .marquee-title { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; font-weight: 600; }
+        .marquee-track {
+            display: inline-block;
+            animation: scrollMarquee 24s linear infinite;
+            font-size: 13px; font-weight: 700; color: var(--accent);
+        }
+        @keyframes scrollMarquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .card-header h2 { font-size: 14px; font-weight: 700; color: var(--text-color); }
+
+        .search-bar input { 
+            width: 100%; padding: 10px 14px; border-radius: 12px; 
+            background: rgba(15, 23, 42, 0.7); border: 1px solid var(--card-border); 
+            color: var(--text-color); font-size: 12px; outline: none; transition: 0.3s;
+        }
+        .search-bar input:focus { border-color: var(--accent); }
+
+        .form-group { margin-bottom: 12px; }
+        .form-row { display: flex; gap: 10px; }
+        .form-row .form-group { flex: 1; }
+        label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        
+        input, select, textarea { 
+            width: 100%; padding: 11px 14px; background: rgba(15, 23, 42, 0.7); 
+            border: 1px solid var(--card-border); border-radius: 12px; color: var(--text-color); 
+            font-size: 13px; outline: none; transition: 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+        .ltr { direction: ltr !important; text-align: left !important; }
+
+        .btn { 
+            border: none; border-radius: 12px; padding: 11px 16px; font-size: 13px; font-weight: 700; 
+            cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: 100%; 
+            transition: all 0.2s ease;
+        }
+        .btn:active { transform: scale(0.98); opacity: 0.9; }
+        .btn-primary { 
+            background: #10b981; color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        .btn-tg { 
+            background: #0284c7; color: white;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+        .btn-sm { padding: 7px 12px; font-size: 11px; width: auto; }
+        .btn-danger { background: #e11d48; color: white; }
+
+        .debt-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .debt-item { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 14px 16px; background: rgba(15, 23, 42, 0.5); 
+            border: 1px solid var(--card-border); border-radius: 14px; font-size: 14px; 
+            cursor: pointer; transition: 0.2s ease;
+        }
+        .debt-item:hover { border-color: var(--accent); }
+        .debt-item.settled-item { border-right: 4px solid var(--success); opacity: 0.85; }
+        .debt-item.active-item { border-right: 4px solid var(--warning); }
+        
+        .debt-name { font-weight: 800; color: var(--text-color); font-size: 15px; }
+        .debt-info { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .debt-price { font-weight: 800; color: var(--accent); font-size: 15px; }
+
+        .progress-bar-bg { width: 100%; background: rgba(255,255,255,0.06); height: 6px; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.4s ease; }
+
+        .nav { 
+            position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); 
+            width: 92%; max-width: 480px; 
+            background: rgba(30, 41, 59, 0.92); backdrop-filter: blur(16px); 
+            display: flex; border: 1px solid var(--card-border); border-radius: 18px; 
+            z-index: 900; padding: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .nav-btn { 
+            flex: 1; padding: 8px 0; text-align: center; border: none; background: none; 
+            color: var(--text-muted); font-size: 10px; cursor: pointer; border-radius: 12px; transition: 0.25s;
+        }
+        .nav-btn.active { color: var(--text-color); background: var(--accent); font-weight: 700; }
+        .nav-btn span { display: block; font-size: 16px; margin-bottom: 2px; }
+
+        .tab { display: none; }
+        .tab.active { display: block; }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: none; justify-content: center; align-items: center; padding: 15px; z-index: 1000; }
+        .modal-body { background: #1e293b; border: 1px solid var(--card-border); border-radius: 20px; width: 100%; max-width: 430px; padding: 20px; max-height: 85vh; overflow-y: auto; box-shadow: 0 16px 36px rgba(0,0,0,0.5); }
+
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 9px 18px; border-radius: 25px; font-size: 12px; font-weight: 700; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 2000; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(4px); }
+
+        .color-picker-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .color-picker-group input[type="color"] { width: 40px; height: 30px; border: none; border-radius: 8px; cursor: pointer; background: transparent; }
+    </style>
+</head>
+<body id="bodyDir" dir="rtl">
+
+    <div class="dollar-bg" id="dollarContainer"></div>
+    <div id="toast" class="toast">ئورۇندالدى</div>
+
+    <div class="container">
+        <!-- ئانالىز كۆزنەكلىرى -->
+        <div class="stat-grid-3">
+            <div class="stat-card" style="border-bottom: 3px solid var(--warning);">
+                <div class="stat-title" id="lblStatActive">قەرزى بارلار</div>
+                <div class="stat-value" style="color:var(--warning);" id="statActiveCount">0 نەپەر</div>
+            </div>
+            <div class="stat-card" style="border-bottom: 3px solid var(--success);">
+                <div class="stat-title" id="lblStatSettled">تۆلەنگەنلەر</div>
+                <div class="stat-value" style="color:var(--success);" id="statSettledCount">0 نەپەر</div>
+            </div>
+            <div class="stat-card" style="border-bottom: 3px solid var(--accent);">
+                <div class="stat-title" id="lblStatTotal">ئومۇمىي قەرز</div>
+                <div class="stat-value" style="color:var(--accent);" id="statTotalSum">0</div>
+            </div>
+        </div>
+
+        <!-- ئايلىنىپ تۇرىدىغان ئېقىن -->
+        <div class="marquee-box">
+            <div class="marquee-title" id="lblMarqueeTitle">قېرىنداشلارنىڭ قەرز ئەھۋالى:</div>
+            <div id="marqueeContainer" class="marquee-track">ئۇچۇرلار يۈكلىنىۋاتىدۇ...</div>
+        </div>
+
+        <!-- 1-بەت: باش بەت -->
+        <div id="tab-1" class="tab active">
+            <div class="card" style="border-right: 4px solid var(--accent);">
+                <div class="card-header"><h2 id="lblActiveCard">قەرزى بار قېرىنداشلار (ئاكتىپ)</h2></div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput1" placeholder="قېرىندىشىمىزنىڭ ئىسمى بىلەن ئىزدەش..." oninput="renderAllLists()">
+                </div>
+                <ul class="debt-list" id="activeNamesList"></ul>
+            </div>
+        </div>
+
+        <!-- 2-بەت: شەخسلەر -->
+        <div id="tab-2" class="tab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="lblPersonCard">شەخسىي قەرزدار قېرىنداشلار</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('person')" id="btnAddPerson">+ قەرز قوشۇش</button>
+                </div>
+                <ul class="debt-list" id="personTabList"></ul>
+            </div>
+        </div>
+
+        <!-- 3-بەت: دۇكان -->
+        <div id="tab-3" class="tab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="lblShopCard">دۇكان قەرزلىرى</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openModal('shop')" id="btnAddShop">+ دۇكان قەرزى قوشۇش</button>
+                </div>
+                <ul class="debt-list" id="shopTabList"></ul>
+            </div>
+        </div>
+
+        <!-- 4-بەت: ئارخىپخانا -->
+        <div id="tab-4" class="tab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="lblArchiveCard">ئارخىپخانا (تۆلەنگەنلەر ۋە ئاكتىپلار)</h2>
+                    <button class="btn btn-tg btn-sm" onclick="window.print()" id="btnPrint">بېسىپ چىقىرىش</button>
+                </div>
+                <div style="display:flex; gap:8px; margin-bottom:12px;">
+                    <button class="btn btn-sm btn-primary" style="flex:1" onclick="setArchiveFilter('all')" id="btnArchAll">ھەممىسى</button>
+                    <button class="btn btn-sm btn-primary" style="flex:1; background:var(--warning);" onclick="setArchiveFilter('active')" id="btnArchActive">قەرزى بارلار</button>
+                    <button class="btn btn-sm btn-primary" style="flex:1; background:var(--success);" onclick="setArchiveFilter('settled')" id="btnArchSettled">تۆلەنگەنلەر</button>
+                </div>
+                <ul class="debt-list" id="manageList"></ul>
+            </div>
+        </div>
+
+        <!-- 5-بەت: تەڭشەك -->
+        <div id="tab-5" class="tab">
+            <div class="card">
+                <div class="card-header"><h2 id="lblSettingsCard">⚙️ سىستېما تەڭشەكلىرى</h2></div>
+                
+                <div class="form-group">
+                    <label id="lblLangSelect">🌐 تىل تاللاش (Language / اللغة):</label>
+                    <select id="langSelect" onchange="changeLanguage(this.value)">
+                        <option value="ug">ئۇيغۇرچە (Uyghur)</option>
+                        <option value="ar">العربية (Arabic)</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 14px; border-radius: 16px; border: 1px solid var(--card-border); margin-bottom: 14px;">
+                    <label style="font-weight: bold; color: var(--accent); margin-bottom: 10px; display:block;">👁️ كۆزگە ئارام بېرىدىغان رەڭلەرنى تەڭشەش:</label>
+                    
+                    <div class="color-picker-group">
+                        <span style="font-size: 11px;">1. بەت ئارقا كۆرۈنۈش رەڭگى:</span>
+                        <input type="color" id="bgColorPicker" value="#0f172a" onchange="updateCustomColors()">
+                    </div>
+
+                    <div class="color-picker-group">
+                        <span style="font-size: 11px;">2. كارتىلار ئارقا رەڭگى:</span>
+                        <input type="color" id="cardColorPicker" value="#1e293b" onchange="updateCustomColors()">
+                    </div>
+
+                    <div class="color-picker-group">
+                        <span style="font-size: 11px;">3. تېكىست رەڭگى:</span>
+                        <input type="color" id="textColorPicker" value="#e2e8f0" onchange="updateCustomColors()">
+                    </div>
+
+                    <div class="color-picker-group">
+                        <span style="font-size: 11px;">4. يۇمشاق ئاساسىي رەڭ:</span>
+                        <input type="color" id="accentColorPicker" value="#10b981" onchange="updateCustomColors()">
+                    </div>
+
+                    <button class="btn btn-sm btn-tg" onclick="resetDefaultColors()" style="margin-top: 8px;">🔄 ئەسلىگە قايتۇرۇش</button>
+                </div>
+
+                <div class="form-group">
+                    <label id="lblNoticeLabel">ھۆرمەتلىك قەرز سۆلەش ئېغىزچە ئۇچۇرى:</label>
+                    <textarea id="customNoticeInput" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Telegram Bot Token (ئاپتوماتىك ئەۋەتىش ئۈچۈن)</label>
+                    <input type="password" id="botTokenInput" class="ltr" placeholder="Bot Token...">
+                </div>
+
+                <div style="margin-top: 16px; border-top: 1px solid var(--card-border); padding-top: 12px;">
+                    <label style="font-size:12px; font-weight:bold; color:var(--accent);" id="lblBackup">زاپاسلاش (Backup):</label>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="btn btn-primary btn-sm" onclick="exportData()" id="btnExport">چىقىرىۋېلىش</button>
+                        <button class="btn btn-tg btn-sm" onclick="importData()" id="btnImport">كىرگۈزۈش</button>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveUserSettings()" style="margin-top:16px;" id="btnSaveSet">تەڭشەكلەرنى ساقلاش</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- قەرز قوشۇش مودالى -->
+    <div class="modal" id="profModal">
+        <div class="modal-body">
+            <h3 id="modalTitle" style="font-size:15px; margin-bottom:12px; color:var(--text-color);">قەرز قوشۇش</h3>
+            <div class="form-group">
+                <label>مۇھتەرەم قېرىندىشىمىزنىڭ ئىسمى *</label>
+                <input type="text" id="pName" placeholder="ئىسىم-شەرىپى" oninput="updateItemPlaceholder()">
+            </div>
+            
+            <div class="form-group">
+                <label>ئېلىنغان نەرسە ياكى تەپسىلاتى *</label>
+                <input type="text" id="pItemName" placeholder="ئالغان نەق پۇل ياكى بۇيۇم ئىسمى">
+            </div>
+
+            <div id="shopExtraFields" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ئولتۇراق رايونى</label>
+                        <input type="text" id="pDistrict" placeholder="1-ئولتۇراق رايون">
+                    </div>
+                    <div class="form-group">
+                        <label>ئۆي نومۇرى</label>
+                        <input type="text" id="pHouseNo" placeholder="25-بىنە، 302-ئۆي">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>سوممىسى *</label><input type="number" id="pAmt" class="ltr" placeholder="0"></div>
+                <div class="form-group">
+                    <label>پۇل بىرلىكى</label>
+                    <select id="pCurr">
+                        <option value="$">$ (دوللار)</option>
+                        <option value="£">£ (سۈرىيە لىراسى)</option>
+                        <option value="₺">₺ (تۈرك لىراسى)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>قەرز بولغان ۋاقىت</label>
+                    <input type="date" id="pStartDate" class="ltr">
+                </div>
+                <div class="form-group">
+                    <label>قايتۇرۇش مۆھلىتى</label>
+                    <input type="date" id="pDueDate" class="ltr">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>ئىسپات ياكى كېلىشىم رەسىمى</label>
+                <button type="button" class="btn btn-tg btn-sm" onclick="document.getElementById('pImageInput').click()" style="width:100%; margin-bottom:6px;">رەسىمخانىدىن تاللاش</button>
+                <input type="file" id="pImageInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+                <input type="hidden" id="pImageBase64">
+                <div id="imgPreviewContainer" style="margin-top: 6px; display: none; text-align: center;">
+                    <img id="imgPreview" src="" style="max-width: 100%; max-height: 140px; border-radius: 12px; border: 1px solid var(--card-border);">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group"><label>Telegram Username (@-سىز)</label><input type="text" id="pTg" class="ltr" placeholder="username"></div>
+                <div class="form-group"><label>Telegram Chat ID</label><input type="text" id="pChatId" class="ltr" placeholder="123456789"></div>
+            </div>
+
+            <input type="hidden" id="pCategoryType" value="person">
+            <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn btn-primary" onclick="saveProfile()">مەلۇماتنى ساقلاش</button>
+                <button class="btn btn-danger" onclick="closeModal('profModal')">ۋاز كەچكۈز</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- تەپسىلات مودالى -->
+    <div class="modal" id="detailModal">
+        <div class="modal-body">
+            <h3 id="detTitle" style="font-size:16px; margin-bottom:10px;">-</h3>
+            
+            <div id="detImageContainer" style="margin-bottom:12px; display:none; text-align:center;">
+                <img id="detImg" src="" style="max-width:100%; max-height:160px; border-radius:14px; border:1px solid var(--card-border);">
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px; margin-bottom: 12px;">
+                <div style="font-size: 12px; font-weight: bold; color: var(--accent); margin-bottom: 6px;">قىسمىن تۆلەنگەن قەرزنى كىرگۈزۈش</div>
+                <div class="form-row">
+                    <input type="number" id="partialAmt" class="ltr" placeholder="تۆلەنگەن سومما">
+                    <button class="btn btn-primary btn-sm" onclick="addPartialPayment()">قوشۇش</button>
+                </div>
+                <div id="partialHistory" style="margin-top:6px; font-size:10px; color:var(--text-muted);"></div>
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--card-border); border-radius: 14px; padding: 12px; margin-bottom: 12px;">
+                <div style="font-size: 13px; font-weight: bold; color: var(--accent); margin-bottom: 6px;">ھۆرمەتلىك قەرز ئەسكەرتىش ئۇچۇرى</div>
+                <div id="detDebtRequestText" style="font-size: 11px; color: var(--text-color); line-height: 1.5; white-space: pre-wrap; background: rgba(16,185,129,0.05); padding: 10px; border-radius: 10px; border: 1px dashed var(--accent);"></div>
+                <button class="btn btn-tg" onclick="sendDebtMessage()" style="margin-top: 10px;">🚀 تېلېگراممىدا ئېچىش ۋە يوللاش</button>
+            </div>
+            
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="btn btn-primary" onclick="markAsSettled()">تولۇق تۆلەندى (ئارخىپقا ئۆتكۈزۈش)</button>
+                <button class="btn btn-danger" onclick="closeModal('detailModal')">تاقاش</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- يولباشلاش بۆلىكى -->
+    <div class="nav">
+        <button class="nav-btn active" onclick="switchTab(1)"><span>🏠</span><span id="navTxtHome">باشبەت</span></button>
+        <button class="nav-btn" onclick="switchTab(2)"><span>👤</span><span id="navTxtPerson">شەخسلەر</span></button>
+        <button class="nav-btn" onclick="switchTab(3)"><span>🏪</span><span id="navTxtShop">دۇكان</span></button>
+        <button class="nav-btn" onclick="switchTab(4)"><span>📁</span><span id="navTxtArchive">ئارخىپ</span></button>
+        <button class="nav-btn" onclick="switchTab(5)"><span>⚙️</span><span id="navTxtGear">تەڭشەك</span></button>
+    </div>
+
+    <script>
+        const translations = {
+            ug: {
+                pageTitle: "📱 تېلېگرامما ئۇچۇر يوللاش نۇسخىسى V34.0",
+                statActive: "قەرزى بارلار",
+                statSettled: "تۆلەنگەنلەر",
+                statTotal: "ئومۇمىي قەرز",
+                marqueeTitle: "قېرىنداشلارنىڭ قەرز ئەھۋالى:",
+                activeCard: "قەرزى بار قېرىنداشلار (ئاكتىپ)",
+                searchPlaceholder: "قېرىندىشىمىزنىڭ ئىسمى بىلەن ئىزدەش...",
+                personCard: "شەخسىي قەرزدار قېرىنداشلار",
+                btnAddPerson: "+ قەرز قوشۇش",
+                shopCard: "دۇكان قەرزلىرى",
+                btnAddShop: "+ دۇكان قەرزى قوشۇش",
+                archiveCard: "ئارخىپخانا (تۆلەنگەنلەر ۋە ئاكتىپلار)",
+                btnPrint: "بېسىپ چىقىرىش",
+                btnArchAll: "ھەممىسى",
+                btnArchActive: "قەرزى بارلار",
+                btnArchSettled: "تۆلەنگەنلەر",
+                settingsCard: "⚙️ سىستېما تەڭشەكلىرى",
+                langSelectLbl: "🌐 تىل تاللاش (Language / اللغة):",
+                noticeLabel: "ھۆرمەتلىك قەرز سۆلەش ئېغىزچە ئۇچۇرى:",
+                backupLbl: "زاپاسلاش (Backup):",
+                btnExport: "چىقىرىۋېلىش",
+                btnImport: "كىرگۈزۈش",
+                btnSaveSet: "تەڭشەكلەرنى ساقلاش",
+                navHome: "باشبەت",
+                navPerson: "شەخسلەر",
+                navShop: "دۇكان",
+                navArchive: "ئارخىپ",
+                navGear: "تەڭشەك",
+                toastSuccess: "ئورۇندالدى"
+            },
+            ar: {
+                pageTitle: "📱 نظام إرسال الرسائل عبر تيليجرام V34.0",
+                statActive: "المدينون",
+                statSettled: "المسددة",
+                statTotal: "إجمالي الديون",
+                marqueeTitle: "حالة ديون الإخوة:",
+                activeCard: "الإخوة المدينون (نشط)",
+                searchPlaceholder: "البحث باسم الأخ...",
+                personCard: "ديون الأشخاص",
+                btnAddPerson: "+ إضافة دين",
+                shopCard: "ديون المتاجر",
+                btnAddShop: "+ إضافة دين متجر",
+                archiveCard: "الأرشيف (المسددة والنشطة)",
+                btnPrint: "طباعة",
+                btnArchAll: "الكل",
+                btnArchActive: "المدينون",
+                btnArchSettled: "المسددة",
+                settingsCard: "⚙️ إعدادات النظام",
+                langSelectLbl: "🌐 اختيار اللغة (Language / اللغة):",
+                noticeLabel: "رسالة تذكير الديون المحترمة:",
+                backupLbl: "النسخ الاحتياطي (Backup):",
+                btnExport: "تصدير",
+                btnImport: "استيراد",
+                btnSaveSet: "حفظ الإعدادات",
+                navHome: "الرئيسية",
+                navPerson: "الأشخاص",
+                navShop: "المتاجر",
+                navArchive: "الأرشيف",
+                navGear: "الإعدادات",
+                toastSuccess: "تم التنفيذ"
+            },
+            en: {
+                pageTitle: "📱 Telegram Debt Messaging System V34.0",
+                statActive: "Active Debtors",
+                statSettled: "Settled",
+                statTotal: "Total Debt",
+                marqueeTitle: "Brothers' Debt Status:",
+                activeCard: "Brothers with Debt (Active)",
+                searchPlaceholder: "Search by brother's name...",
+                personCard: "Personal Debtors",
+                btnAddPerson: "+ Add Debt",
+                shopCard: "Shop Debts",
+                btnAddShop: "+ Add Shop Debt",
+                archiveCard: "Archive (Settled & Active)",
+                btnPrint: "Print",
+                btnArchAll: "All",
+                btnArchActive: "Debtors",
+                btnArchSettled: "Settled",
+                settingsCard: "⚙️ System Settings",
+                langSelectLbl: "🌐 Language Selection (Language / اللغة):",
+                noticeLabel: "Respectful Debt Reminder Notice:",
+                backupLbl: "Backup:",
+                btnExport: "Export",
+                btnImport: "Import",
+                btnSaveSet: "Save Settings",
+                navHome: "Home",
+                navPerson: "Persons",
+                navShop: "Shops",
+                navArchive: "Archive",
+                navGear: "Settings",
+                toastSuccess: "Done"
+            }
+        };
+
+        let profiles = JSON.parse(localStorage.getItem('sys_profs_v340')) || [];
+        let activeId = null;
+        let currentDebtMsgText = '';
+        let archiveFilter = 'all';
+        let currentLang = localStorage.getItem('sys_lang') || 'ug';
+        let isRedirectedToTg = false;
+
+        /* 📱 تېلېگراممىدىن قايتقاندا ئاپتوماتىك سىستېمىغا قايتىپ كىرىش */
+        window.addEventListener('focus', () => {
+            if (isRedirectedToTg) {
+                isRedirectedToTg = false;
+                closeModal('detailModal');
+                showToast('سىستېمىغا ئاپتوماتىك قايتىپ كەلدىڭىز');
+            }
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && isRedirectedToTg) {
+                isRedirectedToTg = false;
+                closeModal('detailModal');
+                showToast('سىستېمىغا ئاپتوماتىك قايتىپ كەلدىڭىز');
+            }
+        });
+
+        function createFloatingDollars() {
+            const container = document.getElementById('dollarContainer');
+            container.innerHTML = '';
+            const dollarSymbols = ['$', '💵', '💲', '💰', '£', '₺'];
+            for (let i = 0; i < 18; i++) {
+                const dollar = document.createElement('div');
+                dollar.className = 'floating-dollar';
+                dollar.textContent = dollarSymbols[Math.floor(Math.random() * dollarSymbols.length)];
+                dollar.style.left = Math.random() * 95 + 'vw';
+                dollar.style.animationDuration = (Math.random() * 7 + 6) + 's';
+                dollar.style.animationDelay = (Math.random() * 5) + 's';
+                dollar.style.fontSize = (Math.random() * 16 + 20) + 'px';
+                container.appendChild(dollar);
+            }
+        }
+
+        function updateCustomColors() {
+            const bg = document.getElementById('bgColorPicker').value;
+            const card = document.getElementById('cardColorPicker').value;
+            const text = document.getElementById('textColorPicker').value;
+            const accent = document.getElementById('accentColorPicker').value;
+
+            document.documentElement.style.setProperty('--bg-color', bg);
+            document.documentElement.style.setProperty('--card-bg', card);
+            document.documentElement.style.setProperty('--text-color', text);
+            document.documentElement.style.setProperty('--accent', accent);
+
+            localStorage.setItem('sys_colors_v34', JSON.stringify({ bg, card, text, accent }));
+        }
+
+        function resetDefaultColors() {
+            document.getElementById('bgColorPicker').value = '#0f172a';
+            document.getElementById('cardColorPicker').value = '#1e293b';
+            document.getElementById('textColorPicker').value = '#e2e8f0';
+            document.getElementById('accentColorPicker').value = '#10b981';
+            updateCustomColors();
+            showToast('رەڭلەر ئەسلىگە كەلتۈرۈلدى');
+        }
+
+        function loadSavedColors() {
+            const saved = JSON.parse(localStorage.getItem('sys_colors_v34'));
+            if (saved) {
+                document.getElementById('bgColorPicker').value = saved.bg || '#0f172a';
+                document.getElementById('cardColorPicker').value = saved.card || '#1e293b';
+                document.getElementById('textColorPicker').value = saved.text || '#e2e8f0';
+                document.getElementById('accentColorPicker').value = saved.accent || '#10b981';
+                updateCustomColors();
+            }
+        }
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('sys_lang', lang);
+            
+            const body = document.getElementById('bodyDir');
+            if (lang === 'en') {
+                body.setAttribute('dir', 'ltr');
+            } else {
+                body.setAttribute('dir', 'rtl');
+            }
+
+            const t = translations[lang];
+            document.getElementById('pageTitle').textContent = t.pageTitle;
+            document.getElementById('lblStatActive').textContent = t.statActive;
+            document.getElementById('lblStatSettled').textContent = t.statSettled;
+            document.getElementById('lblStatTotal').textContent = t.statTotal;
+            document.getElementById('lblMarqueeTitle').textContent = t.marqueeTitle;
+            document.getElementById('lblActiveCard').textContent = t.activeCard;
+            document.getElementById('searchInput1').placeholder = t.searchPlaceholder;
+            document.getElementById('lblPersonCard').textContent = t.personCard;
+            document.getElementById('btnAddPerson').textContent = t.btnAddPerson;
+            document.getElementById('lblShopCard').textContent = t.shopCard;
+            document.getElementById('btnAddShop').textContent = t.btnAddShop;
+            document.getElementById('lblArchiveCard').textContent = t.archiveCard;
+            document.getElementById('btnPrint').textContent = t.btnPrint;
+            document.getElementById('btnArchAll').textContent = t.btnArchAll;
+            document.getElementById('btnArchActive').textContent = t.btnArchActive;
+            document.getElementById('btnArchSettled').textContent = t.btnArchSettled;
+            document.getElementById('lblSettingsCard').textContent = t.settingsCard;
+            document.getElementById('lblLangSelect').textContent = t.langSelectLbl;
+            document.getElementById('lblNoticeLabel').textContent = t.noticeLabel;
+            document.getElementById('lblBackup').textContent = t.backupLbl;
+            document.getElementById('btnExport').textContent = t.btnExport;
+            document.getElementById('btnImport').textContent = t.btnImport;
+            document.getElementById('btnSaveSet').textContent = t.btnSaveSet;
+
+            document.getElementById('navTxtHome').textContent = t.navHome;
+            document.getElementById('navTxtPerson').textContent = t.navPerson;
+            document.getElementById('navTxtShop').textContent = t.navShop;
+            document.getElementById('navTxtArchive').textContent = t.navArchive;
+            document.getElementById('navTxtGear').textContent = t.navGear;
+
+            showToast(t.toastSuccess);
+        }
+
+        function updateItemPlaceholder() {
+            const name = document.getElementById('pName').value.trim();
+            const itemInput = document.getElementById('pItemName');
+            if (name) {
+                itemInput.placeholder = `${name} قېرىندىشىمىزنىڭ ئالغان نەق پۇلى ياكى بۇيۇمى`;
+            } else {
+                itemInput.placeholder = "ئالغان نەق پۇل ياكى بۇيۇم ئىسمى";
+            }
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.textContent = m; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    document.getElementById('pImageBase64').value = evt.target.result;
+                    document.getElementById('imgPreview').src = evt.target.result;
+                    document.getElementById('imgPreviewContainer').style.display = 'block';
+                    showToast('رەسىمخانىدىن رەسىم تاللاندى');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function openModal(cat) {
+            document.getElementById('pCategoryType').value = cat;
+            document.getElementById('modalTitle').textContent = cat === 'person' ? 'شەخسىي قەرز قوشۇش' : 'دۇكان قەرزى قوشۇش';
+            
+            const shopFields = document.getElementById('shopExtraFields');
+            if (cat === 'shop') {
+                shopFields.style.display = 'block';
+            } else {
+                shopFields.style.display = 'none';
+            }
+
+            document.getElementById('pName').value = '';
+            document.getElementById('pItemName').value = '';
+            document.getElementById('pDistrict').value = '';
+            document.getElementById('pHouseNo').value = '';
+            document.getElementById('pAmt').value = '';
+            document.getElementById('pStartDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('pDueDate').value = '';
+            document.getElementById('pImageBase64').value = '';
+            document.getElementById('imgPreviewContainer').style.display = 'none';
+            document.getElementById('pTg').value = '';
+            document.getElementById('pChatId').value = '';
+            updateItemPlaceholder();
+            document.getElementById('profModal').style.display = 'flex';
+        }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function switchTab(n) {
+            document.querySelectorAll('.tab').forEach((el, i) => el.classList.toggle('active', i === n - 1));
+            document.querySelectorAll('.nav-btn').forEach((el, i) => el.classList.toggle('active', i === n - 1));
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('pName').value.trim();
+            const itemName = document.getElementById('pItemName').value.trim() || 'نەق پۇل';
+            const category = document.getElementById('pCategoryType').value;
+            const district = document.getElementById('pDistrict').value.trim();
+            const houseNo = document.getElementById('pHouseNo').value.trim();
+            const amt = parseFloat(document.getElementById('pAmt').value);
+            const curr = document.getElementById('pCurr').value;
+            const startDate = document.getElementById('pStartDate').value || new Date().toLocaleDateString();
+            const dueDate = document.getElementById('pDueDate').value;
+            const image = document.getElementById('pImageBase64').value;
+            const tg = document.getElementById('pTg').value.trim().replace(/^@/, '');
+            const chatId = document.getElementById('pChatId').value.trim();
+
+            if (!name || isNaN(amt)) return showToast('ئىسىم-شەرىپى ۋە سوممىنى تولۇق كىرگۈزۈڭ!');
+
+            profiles.push({ 
+                id: Date.now(), name, itemName, category, district, houseNo, amt, paidAmt: 0, curr, 
+                startDate, dueDate, image, tg, chatId, status: 'active', partials: [] 
+            });
+            localStorage.setItem('sys_profs_v340', JSON.stringify(profiles));
+
+            showToast('مەلۇمات ساقلاندى');
+            closeModal('profModal');
+            renderAllLists();
+            updateStats();
+        }
+
+        function setArchiveFilter(f) {
+            archiveFilter = f;
+            renderAllLists();
+        }
+
+        function updateStats() {
+            const activeList = profiles.filter(p => p.status !== 'settled');
+            const settledList = profiles.filter(p => p.status === 'settled');
+
+            document.getElementById('statActiveCount').textContent = `${activeList.length} نەپەر`;
+            document.getElementById('statSettledCount').textContent = `${settledList.length} نەپەر`;
+
+            let totals = {};
+            activeList.forEach(p => {
+                let rem = p.amt - (p.paidAmt || 0);
+                totals[p.curr] = (totals[p.curr] || 0) + rem;
+            });
+            let sumStr = Object.keys(totals).length ? Object.keys(totals).map(k => `${totals[k]} ${k}`).join(' | ') : '0';
+            document.getElementById('statTotalSum').textContent = sumStr;
+
+            const marquee = document.getElementById('marqueeContainer');
+            if (!profiles.length) {
+                marquee.textContent = "ھازىرچە قەرزدارلىق ئۇچۇرى يوق...";
+            } else {
+                let activeItems = activeList.map(p => `${p.name}: ${p.amt - (p.paidAmt||0)} ${p.curr}`);
+                let settledItems = settledList.map(p => `${p.name} (تۆلەنگەن)`);
+                marquee.textContent = [...activeItems, ...settledItems].join('     •     ');
+            }
+        }
+
+        function renderAllLists() {
+            const activeNamesList = document.getElementById('activeNamesList');
+            const personTabList = document.getElementById('personTabList');
+            const shopTabList = document.getElementById('shopTabList');
+            const manageList = document.getElementById('manageList');
+            const searchVal = document.getElementById('searchInput1').value.toLowerCase();
+
+            activeNamesList.innerHTML = ''; 
+            personTabList.innerHTML = ''; shopTabList.innerHTML = ''; manageList.innerHTML = '';
+
+            const activeList = profiles.filter(p => p.status !== 'settled' && p.name.toLowerCase().includes(searchVal));
+
+            if (!activeList.length) {
+                activeNamesList.innerHTML = `<li style="text-align:center; color:var(--text-muted); padding:10px;">ئاكتىپ قەرزى بار قېرىنداشلار يوق</li>`;
+            } else {
+                activeList.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'debt-item active-item';
+                    li.onclick = () => openDetail(p.id);
+                    let rem = p.amt - (p.paidAmt || 0);
+                    li.innerHTML = `<span class="debt-name">${p.name}</span> <span class="debt-price">${rem} ${p.curr}</span>`;
+                    activeNamesList.appendChild(li);
+                });
+            }
+
+            const persons = activeList.filter(p => p.category === 'person');
+            if (!persons.length) {
+                personTabList.innerHTML = `<li style="text-align:center; color:var(--text-muted); padding:10px;">شەخسىي قەرزى بار قېرىنداشلار يوق</li>`;
+            } else {
+                persons.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'debt-item active-item';
+                    li.onclick = () => openDetail(p.id);
+                    let rem = p.amt - (p.paidAmt || 0);
+                    let pct = Math.round(((p.paidAmt || 0) / p.amt) * 100);
+                    li.innerHTML = `
+                        <div style="width:100%;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span class="debt-name">${p.name}</span>
+                                <span class="debt-price">${rem} ${p.curr}</span>
+                            </div>
+                            <div class="debt-info">تەپسىلاتى: ${p.itemName} | قەرز بولغان ۋاقتى: ${p.startDate || 'يوق'} | مۆھلىتى: ${p.dueDate || 'يوق'}</div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                        </div>
+                    `;
+                    personTabList.appendChild(li);
+                });
+            }
+
+            const shops = activeList.filter(p => p.category === 'shop');
+            if (!shops.length) {
+                shopTabList.innerHTML = `<li style="text-align:center; color:var(--text-muted); padding:10px;">دۇكان قەرزى بار قېرىنداشلار يوق</li>`;
+            } else {
+                shops.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'debt-item active-item';
+                    li.onclick = () => openDetail(p.id);
+                    let rem = p.amt - (p.paidAmt || 0);
+                    let pct = Math.round(((p.paidAmt || 0) / p.amt) * 100);
+                    let locInfo = (p.district || p.houseNo) ? ` | ${p.district || ''} ${p.houseNo || ''}` : '';
+                    li.innerHTML = `
+                        <div style="width:100%;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span class="debt-name">${p.name}</span>
+                                <span class="debt-price">${rem} ${p.curr}</span>
+                            </div>
+                            <div class="debt-info">${p.itemName}${locInfo} | قەرز بولغان ۋاقتى: ${p.startDate || 'يوق'} | مۆھلىتى: ${p.dueDate || 'يوق'}</div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                        </div>
+                    `;
+                    shopTabList.appendChild(li);
+                });
+            }
+
+            let filteredManage = profiles;
+            if (archiveFilter === 'active') filteredManage = profiles.filter(p => p.status !== 'settled');
+            if (archiveFilter === 'settled') filteredManage = profiles.filter(p => p.status === 'settled');
+
+            if (!filteredManage.length) {
+                manageList.innerHTML = `<li style="text-align:center; color:var(--text-muted); padding:10px;">ئارخىپتا مەلۇمات يوق</li>`;
+            } else {
+                filteredManage.forEach(p => {
+                    const li = document.createElement('li');
+                    let isSettled = p.status === 'settled';
+                    li.className = 'debt-item ' + (isSettled ? 'settled-item' : 'active-item');
+                    let statusTxt = isSettled ? 'تۆلەنگەن (ئارخىپلانغان)' : 'قەرزى بار (ئاكتىپ)';
+                    let rem = p.amt - (p.paidAmt || 0);
+                    li.innerHTML = `
+                        <div>
+                            <div class="debt-name" onclick="openDetail(${p.id})" style="cursor:pointer; text-decoration:underline;">${p.name} (${p.itemName})</div>
+                            <div class="debt-info">قەرز بولغان ۋاقتى: ${p.startDate || 'يوق'} | ${isSettled ? 'تۆلەنگىنى: ' + p.amt : 'قالغىنى: ' + rem} ${p.curr} | ${statusTxt}</div>
+                        </div>
+                        <button class="btn btn-danger btn-sm" onclick="deleteProfile(${p.id})">ئۆچۈرۈش</button>
+                    `;
+                    manageList.appendChild(li);
+                });
+            }
+        }
+
+        function openDetail(id) {
+            const p = profiles.find(item => item.id === id);
+            if (!p) return;
+            activeId = id;
+
+            let catLabel = p.category === 'person' ? 'شەخسىي' : 'دۇكان';
+            const defaultNotice = "قەرزنى ئۇنتىماي ۋاقتىدا تۆلەپ قويۇشىڭىزنى ئۈمىد قىلىمەن.\n\nقىرىندىشىم ئاللاھ تائالا غەملىرىڭىزنى كۆتۈرۈۋەتسۇن، ئىشلىرىڭىزنى ئوڭۇشلۇق قىلىۋەتسۇن!";
+            const customNotice = localStorage.getItem('sys_notice_msg') || defaultNotice;
+            
+            document.getElementById('detTitle').textContent = `${p.name} (${catLabel})`;
+
+            if (p.image) {
+                document.getElementById('detImg').src = p.image;
+                document.getElementById('detImageContainer').style.display = 'block';
+            } else {
+                document.getElementById('detImageContainer').style.display = 'none';
+            }
+
+            let rem = p.amt - (p.paidAmt || 0);
+
+            let shopLocInfo = '';
+            if (p.category === 'shop') {
+                if (p.district) shopLocInfo += `ئولتۇراق رايونى: ${p.district}\n`;
+                if (p.houseNo) shopLocInfo += `ئۆي نومۇرى: ${p.houseNo}\n`;
+            }
+
+            currentDebtMsgText = 
+                `ئەسسالامۇئەلەيكۇم ۋە رەھمەتۇللاھى ۋە بەرەكاتۇھۇ، ھۆرمەتلىك قېرىندىشىمىز ${p.name}!\n\n` +
+                `ئېلىنغان نەرسە: ${p.itemName}\n` +
+                shopLocInfo +
+                `قەرز بولغان ۋاقتى: ${p.startDate || 'بېكىتىلمىگەن'}\n` +
+                `ئومۇمىي قەرز سوممىسى: ${p.amt} ${p.curr}\n` +
+                `تۆلەنگىنى: ${p.paidAmt || 0} ${p.curr}\n` +
+                `قالغان قەرز سوممىسى: ${rem} ${p.curr}\n` +
+                `قايتۇرۇش مۆھلىتى: ${p.dueDate || 'بېكىتىلمىگەن'}\n\n` +
+                `${customNotice}`;
+
+            document.getElementById('detDebtRequestText').textContent = currentDebtMsgText;
+            
+            const histDiv = document.getElementById('partialHistory');
+            if (p.partials && p.partials.length) {
+                histDiv.innerHTML = '<b>تۆلەش خاتىرىسى:</b><br>' + p.partials.map(h => `• ${h.date}: ${h.amt} ${p.curr}`).join('<br>');
+            } else {
+                histDiv.innerHTML = 'قىسمىن تۆلەش خاتىرىسى يوق';
+            }
+
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        function addPartialPayment() {
+            const p = profiles.find(item => item.id === activeId);
+            const amtInput = document.getElementById('partialAmt');
+            const val = parseFloat(amtInput.value);
+            if (!val || val <= 0 || !p) return showToast('تۆلەنگەن سوممىنى توغرا كىرگۈزۈڭ!');
+
+            p.paidAmt = (p.paidAmt || 0) + val;
+            if (!p.partials) p.partials = [];
+            p.partials.push({ date: new Date().toLocaleDateString(), amt: val });
+
+            if (p.paidAmt >= p.amt) {
+                p.status = 'settled';
+                showToast('قەرز تولۇق تۆلەندى ھەم ئارخىپقا ئۆتتى');
+            } else {
+                showToast('قىسمىن تۆلەش ساقلاندى');
+            }
+
+            localStorage.setItem('sys_profs_v340', JSON.stringify(profiles));
+            amtInput.value = '';
+            closeModal('detailModal');
+            updateStats();
+            renderAllLists();
+        }
+
+        /* 🚀 تېلېگرامما ئەپىنى بىۋاسىتە ئېچىش ۋە كۆپەيتىش (HTML to APK ئۈچۈن توغرىلانغان) */
+        async function sendDebtMessage() {
+            const token = localStorage.getItem('f_bot_token_v3');
+            const p = profiles.find(item => item.id === activeId);
+
+            if (!p) return;
+            isRedirectedToTg = true;
+
+            /* 1. Bot Token بىلەن Chat ID بار بولسا ئاپتوماتىك Bot ئارقىلىق يوللاش */
+            if (token && p.chatId) {
+                showToast('تېلېگرامما بوتى ئارقىلىق يوللىنىۋاتىدۇ...');
+                try {
+                    let res;
+                    if (p.image) {
+                        let arr = p.image.split(',');
+                        let mime = arr[0].match(/:(.*?);/)[1];
+                        let bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                        while(n--) { u8arr[n] = bstr.charCodeAt(n); }
+                        let file = new File([u8arr], "debt_proof.jpg", {type:mime});
+
+                        let formData = new FormData();
+                        formData.append('chat_id', p.chatId);
+                        formData.append('photo', file);
+                        formData.append('caption', currentDebtMsgText);
+
+                        res = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    } else {
+                        res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ chat_id: p.chatId, text: currentDebtMsgText })
+                        });
+                    }
+                    const data = await res.json();
+                    if (data.ok) {
+                        showToast('تېلېگراممىغا مۇۋەپپەقىيەتلىك ئەۋەتىلدى');
+                        setTimeout(() => closeModal('detailModal'), 1000);
+                        return;
+                    }
+                } catch (e) {}
+            }
+
+            /* 2. تور بېتىدە ئېچىلىپ قالماسلىقى ئۈچۈن Protocol URI (tg://resolve) ئىشلىتىش */
+            if (p.tg) {
+                navigator.clipboard.writeText(currentDebtMsgText);
+                showToast('ئۇچۇر كۆچۈرۈلدى، تېلېگرامما ئەپى ئېچىلىۋاتىدۇ...');
+                
+                // tg:// ئارقىلىق يانفۇندىكى ئانا تېلېگرامما ئەپىنى بىۋاسىتە چاقىرىش
+                window.location.href = `tg://resolve?domain=${p.tg}`;
+                setTimeout(() => closeModal('detailModal'), 1000);
+            } else {
+                navigator.clipboard.writeText(currentDebtMsgText);
+                showToast('ئۇچۇر كۆچۈرۈلدى، تېلېگراممىغا چاپلاڭ!');
+                setTimeout(() => closeModal('detailModal'), 1200);
+            }
+        }
+
+        function markAsSettled() {
+            const p = profiles.find(item => item.id === activeId);
+            if (p) {
+                p.status = 'settled';
+                p.paidAmt = p.amt;
+            }
+            localStorage.setItem('sys_profs_v340', JSON.stringify(profiles));
+            showToast('تولۇق تۆلەندى دەپ ئارخىپقا ئۆتتى');
+            closeModal('detailModal');
+            updateStats();
+            renderAllLists();
+        }
+
+        function deleteProfile(id) {
+            if (confirm("بۇ مەلۇماتنى راستلا ئۆچۈرەمسىز؟")) {
+                profiles = profiles.filter(p => p.id !== id);
+                localStorage.setItem('sys_profs_v340', JSON.stringify(profiles));
+                showToast('ئۆچۈرۈلدى');
+                updateStats();
+                renderAllLists();
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profiles));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "qerz_zapas_v34.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('مەلۇماتلار زاپاسلاندى');
+        }
+
+        function importData() {
+            const input = prompt("زاپاسلانغان JSON كودىنى بوشلۇققا چاپلاڭ:");
+            if (input) {
+                try {
+                    profiles = JSON.parse(input);
+                    localStorage.setItem('sys_profs_v340', JSON.stringify(profiles));
+                    renderAllLists();
+                    updateStats();
+                    showToast('مەلۇماتلار قايتا كىرگۈزۈلدى');
+                } catch (e) {
+                    alert("كوددا خەتالىق بار!");
+                }
+            }
+        }
+
+        function saveUserSettings() {
+            const token = document.getElementById('botTokenInput').value.trim();
+            const noticeMsg = document.getElementById('customNoticeInput').value.trim();
+            localStorage.setItem('f_bot_token_v3', token);
+            if (noticeMsg) localStorage.setItem('sys_notice_msg', noticeMsg);
+            showToast('تەڭشەكلەر ساقلاندى');
+        }
+
+        function loadUserSettings() {
+            document.getElementById('botTokenInput').value = localStorage.getItem('f_bot_token_v3') || '';
+            const defaultNotice = "قەرزنى ئۇنتىماي ۋاقتىدا تۆلەپ قويۇشىڭىزنى ئۈمىد قىلىمەن.\n\nقىرىندىشىم ئاللاھ تائالا غەملىرىڭىزنى كۆتۈرۈۋەتسۇن، ئىشلىرىڭىزنى ئوڭۇشلۇق قىلىۋەتسۇن!";
+            document.getElementById('customNoticeInput').value = localStorage.getItem('sys_notice_msg') || defaultNotice;
+            
+            loadSavedColors();
+
+            const savedLang = localStorage.getItem('sys_lang') || 'ug';
+            document.getElementById('langSelect').value = savedLang;
+            changeLanguage(savedLang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingDollars();
+            updateStats();
+            renderAllLists();
+            loadUserSettings();
+        });
+    </script>
+</body>
+</html>
